@@ -57,13 +57,16 @@ body{
 </div> 
 <button id="addHabitBtn">+ Add Habit</button>
       <div id="habitList"></div>
+      
 <script>
+      
 const addHabitBtn =
 document.getElementById("addHabitBtn");
-      addHabitBtn.oneclick = function()  {        
-     const habitName = prompt("🍀what habit do you want to add?");
       
-      if (habitName && habitName.trim() !== "")  { 
+      addHabitBtn.oneclick = function()  {        
+                const habitName = prompt("🍀what habit do you want to add?");
+      
+      if (habitName)  { 
 
             const habit =
 document.createElement("div");
@@ -78,7 +81,9 @@ document.createElement("div");
 
             habitList.appendChild(habit);
       }
-});    
-</script>      
+}; 
+      
+</script>  
+      
 </body>
 </html>
