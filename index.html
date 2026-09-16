@@ -60,12 +60,8 @@ body{
 <script>
 const addHabitBtn =
 document.getElementById("addHabitBtn");
-const habitlist =
-document .getElementById("habitlist");
-
-addHabitBtn.addEventListener( "click", function
-()  {
-      const habitName = prompt("🍀what habit do you want to add?");
+      addHabitBtn.oneclick = function()  {        
+     const habitName = prompt("🍀what habit do you want to add?");
       
       if (habitName && habitName.trim() !== "")  { 
 
