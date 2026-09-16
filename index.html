@@ -20,7 +20,27 @@ body{
        p  {
              font-size: 18px;
              color: #777;
-       }       
+       } .habit-card{
+             background: white;
+             max-width: 400px;
+             margin: 30x auto;
+             padding: 25px;
+             border-radius: 20px;
+             box-shadow: 0 8px 25px rgba(0, 0,
+       0, 0.08);
+       }
+       .habit-card h2  {
+            margin-button: 10px;
+       {
+
+             habit-card button  {
+                   background: #8fbc8f;
+                   color: white;
+                   border: none;
+                   padding: 12px 25px;
+                   border-radius: 12px;
+                   font-size: 16px;
+                   cursor: pointer;
 </style>
 </head>
 
@@ -35,6 +55,34 @@ body{
 
        <button>✓ Done</button>
 </div> 
+<button id="addHabitBtn">+ Add Habit</button>
+      <div id="habitList"></div>
+<script>
+const addHabitBtn =
+document.getElementById("addHabitBtn");
+const habitlist =
+document .getElementById("habitlist");
+
+addHabitBtn.addEventListener( "click", function
+()  {
+      const habitName = prompt("🍀what habit do you want to add?");
       
+      if (habitName && habitName.trim() !== "")  { 
+
+            const habit =
+document.createElement("div");
+            habit .className = "habit-card";
+
+            habit.innerHTML =
+                  <h2>☘️ ${habitName}</h2>
+                  <p>complete this habit today</p>
+            <button onclick="this.innerText=`✓
+ Done`">° Done</button>
+            `;
+
+            habitList.appendChild(habit);
+      }
+});    
+</script>      
 </body>
 </html>
