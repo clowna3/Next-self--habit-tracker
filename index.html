@@ -61,27 +61,36 @@ body{
 <script>
       
 const addHabitBtn =
-document.getElementById("addHabitBtn");
+document.getElementById("addHabitBtn" );
       
-      addHabitBtn.oneclick = function()  {        
-                const habitName = prompt("🍀what habit do you want to add?");
+addHabitBtn.oneclick = function( )  {        
+       const habitName = prompt("Enter your habit:");
       
-      if (habitName)  { 
-
-            const habit =
+      if (habitName)  {
+       const habit=
 document.createElement("div");
-            habit .className = "habit-card";
 
-            habit.innerHTML = `
-                  <h2>🍀 ${habitName}</h2>
-                  <p>complete this habit today</p>
-            <button onclick="this.innerText=` Done`">° Done</button>
-            `;
+      habit.className = "habit-card";
 
-            habitList.appendChild(habit);
-      }
-}; 
-      
+      const title =
+document.createElement("h2");
+     title.textContent = "🍀 " + habitName;
+            
+            const description = 
+document.textContent("p");
+            description.textContent = "complete
+this habit today";
+
+            const button =
+document.createElement("button");
+            button.textContent = "✓ Done";
+            habit.appentChild(title);
+            habit.appentChild(description);
+            habit.appentChild(button);
+
+document.getElementById("habitList").appentChild(habit);}
+};      
+            
 </script>  
       
 </body>
