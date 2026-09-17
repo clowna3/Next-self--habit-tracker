@@ -365,6 +365,9 @@ function refresh(){
  if(currentPage==='dashboard'||currentPage==='analytics')drawCharts();
 }
 applyTheme();renderTimer();refresh();
+  if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
 </body>
 </html>
