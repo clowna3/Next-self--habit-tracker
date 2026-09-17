@@ -1,97 +1,370 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-      <title>Next Self</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<title>NEXT SELF-study app v2</title>
 <style>
-
-body{
-      font-family:Arial,sans-serif;
-      background:#f7f3f0;
-      color:#333;
-      text-aligh: center;
-      margin: 0;
-      padding: 40px;
+:root{
+  --bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#6b7280;--line:#e7eaf0;
+  --accent:#6d5dfc;--accent2:#8b7fff;--good:#16a34a;--bad:#ef4444;--shadow:0 10px 30px rgba(20,30,60,.08);
 }
-
-       h1 { 
-             font-size: 40px;
-             margin-botton: 10px;
-       }
-       p  {
-             font-size: 18px;
-             color: #777;
-       } .habit-card{
-             background: white;
-             max-width: 400px;
-             margin: 30x auto;
-             padding: 25px;
-             border-radius: 20px;
-             box-shadow: 0 8px 25px rgba(0, 0,
-       0, 0.08);
-       }
-       .habit-card h2  {
-            margin-button: 10px;
-       {
-
-             habit-card button  {
-                   background: #8fbc8f;
-                   color: white;
-                   border: none;
-                   padding: 12px 25px;
-                   border-radius: 12px;
-                   font-size: 16px;
-                   cursor: pointer;
+[data-theme="dark"]{
+  --bg:#0d111b;--card:#151b29;--text:#f5f7ff;--muted:#9aa3b5;--line:#252d3d;
+  --shadow:0 12px 32px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;background:var(--card);border-right:1px solid var(--line);padding:24px 16px;position:fixed;inset:0 auto 0 0;z-index:5}
+.brand{font-weight:900;font-size:22px;letter-spacing:-1px;padding:4px 12px 24px}
+.brand span{color:var(--accent)}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:3px}
+.nav button{width:100%;border:0;background:none;color:var(--muted);padding:12px 14px;border-radius:12px;text-align:left;margin:3px 0}
+.nav button.active,.nav button:hover{background:rgba(109,93,252,.1);color:var(--accent);font-weight:700}
+.main{margin-left:245px;width:calc(100% - 245px);padding:28px;max-width:1500px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}
+h1{margin:0;font-size:30px;letter-spacing:-1px}
+h2{margin:0 0 16px;font-size:20px}
+.muted{color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:10px 14px;border-radius:11px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.danger{color:var(--bad)}
+.grid{display:grid;gap:16px}
+.cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+.two{grid-template-columns:1.25fr .75fr}
+.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.stat{font-size:28px;font-weight:900;margin-top:5px}
+.label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.progress{height:9px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:12px}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid var(--line);border-radius:13px}
+.row-main{min-width:0;flex:1}
+.row-title{font-weight:750}
+.row-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text)}
+.check{background:var(--good);border-color:var(--good);color:white}
+.form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.form.full{grid-template-columns:1fr}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:11px;outline:none}
+textarea{min-height:100px;resize:vertical}
+.form .wide{grid-column:1/-1}
+.timer{text-align:center}
+.timer-face{font-size:68px;font-weight:900;letter-spacing:-3px;margin:14px 0}
+.timer-mode{color:var(--accent);font-weight:800}
+canvas{width:100%;height:280px;display:block}
+.tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:8px 13px;border-radius:10px}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{min-height:55px;border:1px solid var(--line);border-radius:9px;padding:6px;font-size:11px}
+.day b{font-size:12px}.day.active{outline:2px solid var(--accent)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block;margin-right:3px}
+.accuracy{font-size:40px;font-weight:900}
+.quote{font-size:20px;line-height:1.45;font-weight:700}
+.hidden{display:none!important}
+.empty{padding:25px;text-align:center;color:var(--muted)}
+.bottom{display:none}
+.toast{position:fixed;right:22px;bottom:22px;background:#111827;color:white;padding:12px 16px;border-radius:12px;z-index:20;opacity:0;transform:translateY(10px);transition:.2s}
+.toast.show{opacity:1;transform:none}
+@media(max-width:1050px){.cards{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}}
+@media(max-width:720px){
+ .sidebar{display:none}.main{margin:0;width:100%;padding:18px 14px 85px}.topbar h1{font-size:24px}
+ .cards{grid-template-columns:repeat(2,1fr)}.card{padding:15px}.form{grid-template-columns:1fr}
+ .bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);z-index:10;justify-content:space-around;padding:8px}
+ .bottom button{border:0;background:none;color:var(--muted);font-size:11px;padding:5px}.bottom button.active{color:var(--accent);font-weight:800}
+ .timer-face{font-size:54px}
+}
 </style>
 </head>
-
 <body>
-      <h1>Next Self  🍀 </h1>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">NEXT <span>SELF</span><small>STUDY APP • V2</small></div>
+  <nav class="nav" id="nav">
+    <button data-page="dashboard" class="active">⌂ Dashboard</button>
+    <button data-page="timer">◷ Pomodoro</button>
+    <button data-page="subjects">▣ Subjects</button>
+    <button data-page="habits">✓ Habits</button>
+    <button data-page="goals">◎ Goals</button>
+    <button data-page="neet">🧠 NEET Mode</button>
+    <button data-page="analytics">⌁ Analytics</button>
+    <button data-page="calendar">▦ Calendar</button>
+    <button data-page="notes">✎ Quick Notes</button>
+    <button data-page="settings">⚙ Settings</button>
+  </nav>
+</aside>
 
-      <p> become better version of yourself every day .</p>
+<main class="main">
+<div class="topbar">
+  <div><h1 id="pageTitle">Good day, future doctor.</h1><div class="muted" id="dateLine"></div></div>
+  <div class="actions"><button class="btn" id="themeBtn">☾ Theme</button><button class="btn primary" onclick="showPage('timer')">Start Focus</button></div>
+</div>
 
-<div class="habit-card">
-       <h2>📚  Study</h2>
-       <p>complete your daily study session</p>
+<section id="dashboard" class="page">
+ <div class="grid cards">
+  <div class="card"><div class="label">Today's study</div><div class="stat" id="dashHours">0m</div><div class="muted">focused time</div></div>
+  <div class="card"><div class="label">Habit streak</div><div class="stat" id="dashStreak">0 🔥</div><div class="muted">current streak</div></div>
+  <div class="card"><div class="label">NEET accuracy</div><div class="stat" id="dashAccuracy">0%</div><div class="muted">questions attempted</div></div>
+  <div class="card"><div class="label">Goals</div><div class="stat" id="dashGoals">0%</div><div class="muted">overall progress</div></div>
+ </div>
+ <br>
+ <div class="grid two">
+  <div class="card"><h2>Today's habits</h2><div id="dashHabits" class="list"></div></div>
+  <div class="card"><h2>NEET countdown</h2><div class="stat" id="countdown">Set exam date</div><p class="muted">Change it in Settings.</p><div class="quote" id="quote"></div></div>
+ </div>
+ <br>
+ <div class="card"><h2>Progress</h2><div class="tabs"><button class="tab active" data-range="daily">Daily</button><button class="tab" data-range="weekly">Weekly</button><button class="tab" data-range="monthly">Monthly</button></div><canvas id="dashChart"></canvas></div>
+</section>
 
-       <button> Done</button>
-</div> 
-<button id="addHabitBtn">+ Add Habit</button>
-      <div id="habitList"></div>
-      
+<section id="timer" class="page hidden">
+ <div class="grid two">
+  <div class="card timer">
+   <h2>Focus Timer</h2><div class="timer-mode" id="timerMode">FOCUS</div><div class="timer-face" id="timerFace">25:00</div>
+   <div class="actions" style="justify-content:center"><button class="btn primary" id="timerStart">Start</button><button class="btn" id="timerReset">Reset</button></div>
+   <br><select id="timerPreset"><option value="25">25 / 5</option><option value="50">50 / 10</option><option value="90">90 / 20</option><option value="custom">Custom</option></select>
+   <div class="form" style="margin-top:10px"><input id="timerCustom" type="number" min="1" placeholder="Custom minutes"><input id="timerSubject" list="subjectList" placeholder="Subject (optional)"></div>
+  </div>
+  <div class="card"><h2>Today's study log</h2><div id="studyLog" class="list"></div></div>
+ </div>
+</section>
+
+<section id="subjects" class="page hidden">
+ <div class="card"><h2>Add subject</h2><div class="form"><input id="subjectName" placeholder="e.g. Physics"><input id="subjectTarget" type="number" min="0" placeholder="Weekly target hours"><button class="btn primary wide" onclick="addSubject()">Add Subject</button></div></div><br>
+ <div class="card"><h2>Your subjects</h2><div id="subjectListView" class="list"></div></div>
+</section>
+
+<section id="habits" class="page hidden">
+ <div class="card"><h2>Add habit</h2><div class="form"><input id="habitName" placeholder="e.g. 50 Biology MCQs"><select id="habitSubject"><option value="">No subject</option></select><input id="habitTarget" type="number" min="1" value="1" placeholder="Daily target"><button class="btn primary wide" onclick="addHabit()">Add Habit</button></div></div><br>
+ <div class="card"><h2>Habit tracker</h2><div id="habitView" class="list"></div></div>
+</section>
+
+<section id="goals" class="page hidden">
+ <div class="card"><h2>Add goal</h2><div class="form"><input id="goalName" placeholder="e.g. Finish Human Physiology"><input id="goalTarget" type="number" min="1" placeholder="Target"><button class="btn primary wide" onclick="addGoal()">Add Goal</button></div></div><br>
+ <div class="card"><h2>Goals</h2><div id="goalView" class="list"></div></div>
+</section>
+
+<section id="neet" class="page hidden">
+ <div class="grid three">
+  <div class="card"><div class="label">Attempted</div><div class="stat" id="nAttempt">0</div></div>
+  <div class="card"><div class="label">Correct</div><div class="stat" id="nCorrect">0</div></div>
+  <div class="card"><div class="label">Accuracy</div><div class="accuracy" id="nAccuracy">0%</div></div>
+ </div><br>
+ <div class="grid two">
+  <div class="card"><h2>Record practice</h2><div class="form"><input id="qTotal" type="number" min="1" placeholder="Questions attempted"><input id="qCorrect" type="number" min="0" placeholder="Correct"><select id="qSubject"><option value="">Subject</option></select><button class="btn primary wide" onclick="addPractice()">Save Practice</button></div></div>
+  <div class="card"><h2>Recent practice</h2><div id="practiceView" class="list"></div></div>
+ </div>
+</section>
+
+<section id="analytics" class="page hidden">
+ <div class="card"><h2>Study analytics</h2><div class="tabs"><button class="tab active" data-range="daily">Daily</button><button class="tab" data-range="weekly">Weekly</button><button class="tab" data-range="monthly">Monthly</button></div><canvas id="analyticsChart"></canvas></div><br>
+ <div class="card"><h2>Subject performance</h2><div id="subjectAnalytics" class="list"></div></div>
+</section>
+
+<section id="calendar" class="page hidden"><div class="card"><h2>Study calendar</h2><div id="calendarView" class="calendar"></div></div></section>
+
+<section id="notes" class="page hidden">
+ <div class="card"><h2>Quick Notes</h2><textarea id="notesText" placeholder="Write anything you want to remember..."></textarea><br><br><button class="btn primary" onclick="saveNotes()">Save Notes</button></div>
+</section>
+
+<section id="settings" class="page hidden">
+ <div class="card"><h2>Settings</h2><div class="form"><label>NEET exam date<input id="examDate" type="date"></label><label>App name<input value="NEXT SELF-study app" disabled></label></div><br>
+ <div class="actions"><button class="btn primary" onclick="saveSettings()">Save Settings</button><button class="btn" onclick="exportData()">Export Data</button><label class="btn">Import Data<input id="importFile" type="file" accept=".json" hidden></label><button class="btn danger" onclick="resetAll()">Reset All Data</button></div></div>
+</section>
+
+<datalist id="subjectList"></datalist>
+</main>
+</div>
+
+<div class="bottom" id="bottomNav"></div>
+<div class="toast" id="toast"></div>
+
 <script>
-      
-const addHabitBtn =
-document.getElementById("addHabitBtn" );
-      
-addHabitBtn.oneclick = function( )  {        
-       const habitName = prompt("Enter your habit:");
-      
-      if (habitName)  {
-       const habit=
-document.createElement("div");
+'use strict';
 
-      habit.className = "habit-card";
+const KEY='next-self-v2';
+const quotes=[
+ "Start before you feel ready.",
+ "Small progress is still progress.",
+ "Discipline is choosing what you want most.",
+ "One focused hour can change your day.",
+ "Your future self is watching."
+];
+let data=load();
+let currentPage='dashboard';
+let timer={seconds:(data.settings.focus||25)*60,running:false,interval:null,mode:'focus',focusMin:data.settings.focus||25,breakMin:data.settings.break||5};
 
-      const title =
-document.createElement("h2");
-     title.textContent = "🍀 " + habitName;
-            
-            const description = 
-document.textContent("p");
-            description.textContent = "complete
-this habit today";
+function fresh(){
+ return {subjects:[],habits:[],goals:[],sessions:[],practice:[],settings:{examDate:'',focus:25,break:5},notes:'',theme:'light'};
+}
+function load(){try{return Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){return fresh()}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));refresh()}
+function today(){return new Date().toISOString().slice(0,10)}
+function fmtMin(m){m=Math.round(m);return m<60?m+'m':Math.floor(m/60)+'h '+(m%60)+'m'}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
 
-            const button =
-document.createElement("button");
-            button.textContent = "✓ Done";
-            habit.appentChild(title);
-            habit.appentChild(description);
-            habit.appentChild(button);
+function showPage(page){
+ currentPage=page;
+ document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==page));
+ document.querySelectorAll('.nav button,.bottom button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
+ const names={dashboard:'Good day, future doctor.',timer:'Focus Mode',subjects:'Subjects',habits:'Habits',goals:'Goals',neet:'NEET Mode',analytics:'Analytics',calendar:'Calendar',notes:'Quick Notes',settings:'Settings'};
+ document.getElementById('pageTitle').textContent=names[page]||'NEXT SELF';
+ if(page==='dashboard'||page==='analytics') drawCharts();
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+const bottom=document.getElementById('bottomNav');
+['dashboard','timer','habits','neet','analytics'].forEach(p=>{let b=document.createElement('button');b.dataset.page=p;b.textContent={dashboard:'⌂ Home',timer:'◷ Focus',habits:'✓ Habits',neet:'🧠 NEET',analytics:'⌁ Stats'}[p];b.onclick=()=>showPage(p);bottom.appendChild(b)});
 
-document.getElementById("habitList").appentChild(habit);}
-};      
-            
-</script>  
-      
+function addSubject(){
+ const name=document.getElementById('subjectName').value.trim(),target=Number(document.getElementById('subjectTarget').value)||0;
+ if(!name)return toast('Enter a subject');
+ data.subjects.push({id:Date.now(),name,target});document.getElementById('subjectName').value='';document.getElementById('subjectTarget').value='';save();toast('Subject added');
+}
+function delSubject(id){data.subjects=data.subjects.filter(x=>x.id!==id);data.habits.forEach(h=>{if(h.subjectId===id)h.subjectId=''});save()}
+function addHabit(){
+ const name=document.getElementById('habitName').value.trim(),target=Number(document.getElementById('habitTarget').value)||1,subjectId=document.getElementById('habitSubject').value;
+ if(!name)return toast('Enter a habit');
+ data.habits.push({id:Date.now(),name,target,subjectId,days:{}});document.getElementById('habitName').value='';save();toast('Habit added');
+}
+function toggleHabit(id){
+ const h=data.habits.find(x=>x.id===id);if(!h)return;
+ h.days[today()]=!h.days[today()];save();toast(h.days[today()]?'Habit completed ✓':'Habit unchecked');
+}
+function delHabit(id){data.habits=data.habits.filter(x=>x.id!==id);save()}
+function addGoal(){
+ const name=document.getElementById('goalName').value.trim(),target=Number(document.getElementById('goalTarget').value)||1;
+ if(!name)return toast('Enter a goal');
+ data.goals.push({id:Date.now(),name,target,current:0});document.getElementById('goalName').value='';document.getElementById('goalTarget').value='';save();
+}
+function changeGoal(id,delta){let g=data.goals.find(x=>x.id===id);if(g){g.current=Math.max(0,Math.min(g.target,g.current+delta));save()}}
+function delGoal(id){data.goals=data.goals.filter(x=>x.id!==id);save()}
+
+function addPractice(){
+ let total=Number(document.getElementById('qTotal').value),correct=Number(document.getElementById('qCorrect').value),subject=document.getElementById('qSubject').value;
+ if(!total||correct<0||correct>total)return toast('Check your numbers');
+ data.practice.unshift({id:Date.now(),date:today(),total,correct,subject});document.getElementById('qTotal').value='';document.getElementById('qCorrect').value='';save();toast('Practice saved');
+}
+function delPractice(id){data.practice=data.practice.filter(x=>x.id!==id);save()}
+
+function logSession(minutes,subject){
+ if(minutes<=0)return;
+ data.sessions.push({id:Date.now(),date:today(),minutes,subject:subject||''});save();toast('Study session saved');
+}
+function startTimer(){
+ if(timer.running)return;
+ timer.running=true;document.getElementById('timerStart').textContent='Pause';
+ timer.interval=setInterval(()=>{
+  timer.seconds--;renderTimer();
+  if(timer.seconds<=0){
+   clearInterval(timer.interval);timer.running=false;
+   if(timer.mode==='focus'){logSession(timer.focusMin,document.getElementById('timerSubject').value);timer.mode='break';timer.seconds=timer.breakMin*60;toast('Focus complete! Break time.')}
+   else{timer.mode='focus';timer.seconds=timer.focusMin*60;toast('Break complete! Back to focus.')}
+   document.getElementById('timerStart').textContent='Start';renderTimer();
+  }
+ },1000)
+}
+function pauseTimer(){clearInterval(timer.interval);timer.running=false;document.getElementById('timerStart').textContent='Start'}
+function renderTimer(){let s=Math.max(0,timer.seconds),m=String(Math.floor(s/60)).padStart(2,'0'),sec=String(s%60).padStart(2,'0');document.getElementById('timerFace').textContent=m+':'+sec;document.getElementById('timerMode').textContent=timer.mode==='focus'?'FOCUS':'BREAK'}
+document.getElementById('timerStart').onclick=()=>timer.running?pauseTimer():startTimer();
+document.getElementById('timerReset').onclick=()=>{pauseTimer();timer.mode='focus';timer.seconds=timer.focusMin*60;renderTimer()};
+document.getElementById('timerPreset').onchange=e=>{
+ if(e.target.value==='custom')return;
+ timer.focusMin=Number(e.target.value);timer.breakMin=timer.focusMin===25?5:timer.focusMin===50?10:20;timer.seconds=timer.focusMin*60;data.settings.focus=timer.focusMin;data.settings.break=timer.breakMin;save()
+};
+document.getElementById('timerCustom').onchange=e=>{let n=Number(e.target.value);if(n>0){timer.focusMin=n;timer.seconds=n*60;data.settings.focus=n;save();renderTimer()}};
+
+function subjectName(id){return data.subjects.find(s=>s.id==id)?.name||'General'}
+function streak(){
+ let best=0,cur=0,d=new Date();
+ for(let i=0;i<366;i++){let key=d.toISOString().slice(0,10);let done=data.habits.some(h=>h.days[key]);if(done)cur++;else if(i>0)break;d.setDate(d.getDate()-1)}
+ return cur
+}
+function overallGoal(){if(!data.goals.length)return 0;return Math.round(data.goals.reduce((a,g)=>a+Math.min(1,g.current/g.target),0)/data.goals.length*100)}
+function accuracy(){let t=data.practice.reduce((a,p)=>a+p.total,0),c=data.practice.reduce((a,p)=>a+p.correct,0);return t?Math.round(c/t*100):0}
+function renderSubjects(){
+ const v=document.getElementById('subjectListView');
+ v.innerHTML=data.subjects.length?data.subjects.map(s=>{
+  let mins=data.sessions.filter(x=>x.subject===s.name).reduce((a,x)=>a+x.minutes,0),pct=s.target?Math.min(100,Math.round(mins/60/s.target*100)):0;
+  return `<div class="row"><div class="row-main"><div class="row-title">${esc(s.name)}</div><div class="row-meta">${fmtMin(mins)} studied • ${s.target||0}h weekly target</div><div class="progress"><i style="width:${pct}%"></i></div></div><button class="iconbtn" onclick="delSubject(${s.id})">×</button></div>`
+ }).join(''):'<div class="empty">Add your first subject.</div>';
+}
+function renderHabits(){
+ const opts='<option value="">No subject</option>'+data.subjects.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
+ document.getElementById('habitSubject').innerHTML=opts;
+ const v=document.getElementById('habitView'),d=today();
+ v.innerHTML=data.habits.length?data.habits.map(h=>`<div class="row"><div class="row-main"><div class="row-title">${esc(h.name)}</div><div class="row-meta">${h.target} target • ${h.subjectId?esc(subjectName(h.subjectId)):'General'}</div></div><button class="iconbtn ${h.days[d]?'check':''}" onclick="toggleHabit(${h.id})">${h.days[d]?'✓':'○'}</button><button class="iconbtn" onclick="delHabit(${h.id})">×</button></div>`).join(''):'<div class="empty">No habits yet.</div>';
+ document.getElementById('dashHabits').innerHTML=v.innerHTML;
+}
+function renderGoals(){
+ const v=document.getElementById('goalView');
+ v.innerHTML=data.goals.length?data.goals.map(g=>{let p=Math.round(g.current/g.target*100);return `<div class="row"><div class="row-main"><div class="row-title">${esc(g.name)}</div><div class="row-meta">${g.current} / ${g.target}</div><div class="progress"><i style="width:${Math.min(100,p)}%"></i></div></div><button class="iconbtn" onclick="changeGoal(${g.id},-1)">−</button><button class="iconbtn" onclick="changeGoal(${g.id},1)">+</button><button class="iconbtn" onclick="delGoal(${g.id})">×</button></div>`}).join(''):'<div class="empty">Create a goal.</div>';
+}
+function renderPractice(){
+ document.getElementById('practiceView').innerHTML=data.practice.length?data.practice.slice(0,10).map(p=>`<div class="row"><div class="row-main"><div class="row-title">${esc(p.subject||'General')}</div><div class="row-meta">${p.date} • ${p.correct}/${p.total} correct (${Math.round(p.correct/p.total*100)}%)</div></div><button class="iconbtn" onclick="delPractice(${p.id})">×</button></div>`).join(''):'<div class="empty">No practice recorded.</div>';
+}
+function renderStudyLog(){
+ let a=data.sessions.filter(s=>s.date===today()).slice().reverse();
+ document.getElementById('studyLog').innerHTML=a.length?a.map(s=>`<div class="row"><div class="row-main"><div class="row-title">${esc(s.subject||'General')}</div><div class="row-meta">${s.minutes} minutes</div></div></div>`).join(''):'<div class="empty">Complete a Pomodoro session to log study.</div>';
+}
+function renderAnalytics(){
+ let by={};data.subjects.forEach(s=>by[s.name]=0);data.sessions.forEach(s=>by[s.subject||'General']=(by[s.subject||'General']||0)+s.minutes);
+ document.getElementById('subjectAnalytics').innerHTML=Object.entries(by).length?Object.entries(by).map(([n,m])=>`<div class="row"><div class="row-main"><div class="row-title">${esc(n)}</div><div class="row-meta">${fmtMin(m)} total</div></div></div>`).join(''):'<div class="empty">Add subjects to see performance.</div>';
+}
+function renderCalendar(){
+ let v=document.getElementById('calendarView'),d=new Date(),y=d.getFullYear(),m=d.getMonth(),first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),out='';
+ ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(x=>out+=`<div class="day"><b>${x}</b></div>`);
+ for(let i=0;i<first;i++)out+='<div class="day"></div>';
+ for(let day=1;day<=days;day++){let k=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`,has=data.sessions.some(s=>s.date===k)||data.habits.some(h=>h.days[k]);out+=`<div class="day ${k===today()?'active':''}"><b>${day}</b><br>${has?'<span class="dot"></span>Study':''}</div>`}
+ v.innerHTML=out;
+}
+function drawChart(canvasId,range){
+ const c=document.getElementById(canvasId);if(!c)return;const ctx=c.getContext('2d'),w=c.clientWidth||700,h=280,dpr=devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ let labels=[],vals=[];
+ if(range==='daily'){for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let k=d.toISOString().slice(0,10);labels.push(k.slice(5));vals.push(data.sessions.filter(s=>s.date===k).reduce((a,s)=>a+s.minutes,0)/60)}}
+ else if(range==='weekly'){for(let i=7;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i*7);let start=new Date(d);start.setDate(d.getDate()-6);let sum=0;data.sessions.forEach(s=>{let x=new Date(s.date),a=new Date(start.toDateString()),b=new Date(d.toDateString());if(x>=a&&x<=b)sum+=s.minutes});labels.push((d.getMonth()+1)+'/'+d.getDate());vals.push(sum/60)}}
+ else {for(let i=5;i>=0;i--){let d=new Date();d.setMonth(d.getMonth()-i);let y=d.getFullYear(),m=d.getMonth();labels.push((m+1)+'/'+String(y).slice(2));vals.push(data.sessions.filter(s=>{let x=new Date(s.date);return x.getFullYear()===y&&x.getMonth()===m}).reduce((a,s)=>a+s.minutes,0)/60)}}
+ const max=Math.max(1,...vals),pad=35,base=h-35,plotW=w-pad*2,plotH=h-70;
+ ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--line');ctx.lineWidth=1;
+ for(let i=0;i<5;i++){let y=base-plotH*i/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad,y);ctx.stroke()}
+ ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--accent');ctx.lineWidth=3;ctx.beginPath();
+ vals.forEach((v,i)=>{let x=pad+i*plotW/(vals.length-1||1),y=base-v/max*plotH;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();
+ ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--text');ctx.font='11px system-ui';
+ vals.forEach((v,i)=>{let x=pad+i*plotW/(vals.length-1||1),y=base-v/max*plotH;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.fillText(labels[i],x-14,base+18);if(v)ctx.fillText(v.toFixed(1)+'h',x-12,y-10)});
+}
+function drawCharts(){
+ let range=document.querySelector('.page:not(.hidden) .tab.active')?.dataset.range||'daily';drawChart('dashChart',range);drawChart('analyticsChart',range)
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{let box=b.parentElement;b.parentElement.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');drawCharts()});
+window.addEventListener('resize',()=>{if(currentPage==='dashboard'||currentPage==='analytics')drawCharts()});
+
+function saveNotes(){data.notes=document.getElementById('notesText').value;save();toast('Notes saved')}
+function saveSettings(){data.settings.examDate=document.getElementById('examDate').value;save();toast('Settings saved')}
+function exportData(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='next-self-backup.json';a.click();URL.revokeObjectURL(a.href)}
+document.getElementById('importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{data=Object.assign(fresh(),JSON.parse(r.result));save();toast('Data imported')}catch(x){toast('Invalid backup file')}};r.readAsText(f)}
+function resetAll(){if(confirm('Delete all NEXT SELF data?')){localStorage.removeItem(KEY);data=fresh();location.reload()}}
+document.getElementById('themeBtn').onclick=()=>{data.theme=data.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=data.theme;save()};
+function applyTheme(){document.documentElement.dataset.theme=data.theme}
+function refresh(){
+ document.getElementById('dateLine').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+ let mins=data.sessions.filter(s=>s.date===today()).reduce((a,s)=>a+s.minutes,0);
+ document.getElementById('dashHours').textContent=fmtMin(mins);document.getElementById('dashStreak').textContent=streak()+' 🔥';document.getElementById('dashAccuracy').textContent=accuracy()+'%';document.getElementById('dashGoals').textContent=overallGoal()+'%';
+ let q=quotes[new Date().getDate()%quotes.length];document.getElementById('quote').textContent='“'+q+'”';
+ if(data.settings.examDate){let days=Math.ceil((new Date(data.settings.examDate+'T23:59:59')-new Date())/86400000);document.getElementById('countdown').textContent=days>=0?days+' days':'Exam date passed'}else document.getElementById('countdown').textContent='Set exam date';
+ document.getElementById('examDate').value=data.settings.examDate||'';document.getElementById('notesText').value=data.notes||'';
+ document.getElementById('nAttempt').textContent=data.practice.reduce((a,p)=>a+p.total,0);document.getElementById('nCorrect').textContent=data.practice.reduce((a,p)=>a+p.correct,0);document.getElementById('nAccuracy').textContent=accuracy()+'%';
+ document.getElementById('qSubject').innerHTML='<option value="">Subject</option>'+data.subjects.map(s=>`<option>${esc(s.name)}</option>`).join('');
+ document.getElementById('subjectList').innerHTML=data.subjects.map(s=>`<option value="${esc(s.name)}">`).join('');
+ renderSubjects();renderHabits();renderGoals();renderPractice();renderStudyLog();renderAnalytics();renderCalendar();
+ if(currentPage==='dashboard'||currentPage==='analytics')drawCharts();
+}
+applyTheme();renderTimer();refresh();
+</script>
 </body>
 </html>
